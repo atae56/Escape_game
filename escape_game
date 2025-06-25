@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Escape Game : Trouve le code</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e2f;
+      color: white;
+      padding: 20px;
+    }
+    .question {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #2d2d40;
+      border-radius: 10px;
+    }
+    input[type="text"] {
+      padding: 5px;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      background-color: #4caf50;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
+    .digit {
+      font-size: 24px;
+      font-weight: bold;
+      color: #4caf50;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔐 Escape Game : Trouve le code secret</h1>
+  <p>Réponds correctement aux énigmes pour révéler les **10 chiffres** du code !</p>
+
+  <div id="questions"></div>
+
+  <h2>Code trouvé :</h2>
+  <div id="code" class="digit">__________</div>
+
+  <script>
+    const enigmes = [
+      { question: "1. Je suis le premier chiffre. Combien y a-t-il de zéros dans le mot 'zéro' ?", answer: "0", digit: "0" },
+      { question: "2. Je suis un chiffre pair. Je suis avant 7 mais après 5. Qui suis-je ?", answer: "6", digit: "6" },
+      { question: "3. Si tu doubles 2, tu obtiens ?", answer: "4", digit: "5" }, // volontairement faux pour la logique du code
+      { question: "4. Si tu écris 'DEUX' en chiffres, ça donne ?", answer: "2", digit: "2" },
+      { question: "5. Un chiffre qui est la moitié de 10 ?", answer: "5", digit: "2" },
+      { question: "6. Un de mes côtés est pair, l'autre impair. Je suis 13 divisé par 2 (arrondi au supérieur)", answer: "7", digit: "6" },
+      { question: "7. Le double de 2.5 ?", answer: "5", digit: "5" },
+      { question: "8. Je suis le chiffre après 6.", answer: "7", digit: "7" },
+      { question: "9. Le premier chiffre des nombres à deux chiffres ?", answer: "1", digit: "0" },
+      { question: "10. Je suis rien mais je compte. Qui suis-je ?", answer: "0", digit: "6" }
+    ];
+
+    const questionsContainer = document.getElementById('questions');
+    const codeDisplay = document.getElementById('code');
+    let codeDigits = Array(10).fill("_");
+
+    enigmes.forEach((enigme, index) => {
+      const div = document.createElement('div');
+      div.className = 'question';
+      div.innerHTML = `
+        <p>${enigme.question}</p>
+        <input type="text" id="answer-${index}" />
+        <button onclick="checkAnswer(${index})">Valider</button>
+        <span id="digit-${index}" class="digit"></span>
+      `;
+      questionsContainer.appendChild(div);
+    });
+
+    function checkAnswer(index) {
+      const userAnswer = document.getElementById(`answer-${index}`).value.trim().toLowerCase();
+      const correctAnswer = enigmes[index].answer.toLowerCase();
+      if (userAnswer === correctAnswer) {
+        document.getElementById(`digit-${index}`).innerText = enigmes[index].digit;
+        codeDigits[index] = enigmes[index].digit;
+        codeDisplay.innerText = codeDigits.join('');
+      } else {
+        document.getElementById(`digit-${index}`).innerText = "❌";
+      }
+    }
+  </script>
+
+</body>
+</html>
